@@ -1,5 +1,2 @@
-# Trabalho
-Trabalho feito na disciplina de Projeto de sistemas sobre uma farmácia.
-
-# Autores 
-Jadson Pereira, Magno Macedo e Tadeu Junior.
+# lookatme
+Projetinho para processar uma api e processar os dados.

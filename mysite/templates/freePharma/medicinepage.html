@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!--Setting all css dependencies-->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% load staticfiles%}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+        type="text/css">
+    <link rel="stylesheet" href="theme.css" type="text/css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="{% static 'freePharma/theme.css' %}">
+    </link>
+    <style>
+         ul {
+          list-style-type: none;
+          margin: 0;
+          padding: 0;
+          overflow: hidden;
+          background-color: #333;
+        }
+
+        li {
+          float: left;
+        }
+
+        li a {
+          display: block;
+          color: white;
+          text-align: center;
+          padding: 14px 16px;
+          text-decoration: none;
+        }
+
+        li a:hover {
+          background-color: #111;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation Bar, containing logo, user info and links-->
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+        <div class="container"> <button class="navbar-toggler navbar-toggler-right border-0" type="button"
+                data-toggle="collapse" data-target="#navbar12">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbar12"> <a class="navbar-brand d-none d-md-block"
+                    href="homepage.html">
+                    <i class="fa d-inline fa-lg fa-eye"></i>
+                    <b> FreePharma</b>
+                </a>
+                <ul class="navbar-nav mx-auto">
+                    <!--All alerts page-->
+                    <li class="nav-item"> <a class="nav-link" href="alertpage.html">Alerts</a> </li>
+                    <!--Reports-->
+                    <li class="nav-item"> <a class="nav-link" href="#">Reports</a> </li>
+                    <!--Adding Criminal Files-->
+                    <li class="nav-item"> <a class="nav-link" href="#">Add Info</a> </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item"> <a class="nav-link" href="#">TestUser</a> </li>
+                    <li class="nav-item"> <a class="nav-link text-primary" href="#">Logout<br></a> </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div id="all-alerts" class="container">
+
+    {% block content %}
+        {% if medicines %}
+            <div>
+                <ul>
+                      <li><a class="active" href="alertas"> </a></li>
+                      <li><a href="aberto">Abertos</a></li>
+                      <li><a href="fechado">Fechados</a></li>
+                      <li><a href="andamento">Em Andamento</a></li>
+                      <li><a href="cancelado">Cancelados</a></li>
+                </ul>
+            </div>
+
+            <table class="table table-striped" id="table-alerts">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">name</th>
+                        <th scope="col">amount</th>
+                        <th scope="col">lot</th>
+                        <th scope="col">validity</th>
+                        <th scope="col">description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for medicine in medicines%}
+                        {% if medicine.amount > medicine.minAmount%}
+                            <tr>
+                                <td>{{ medicine.name}}</td>
+                                <td>{{ medicine.amount}}</td>
+                                <td>{{ medicine.lot }}</td>
+                                <td>{{ medicine.validade }}</td>
+                                <td>{{ medicine.description }}</td>
+                            </tr>
+                        {%endif%}
+                        
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div>
+                <h4>Nada encontrado</h4>
+            </div>
+        {% endif %}
+    {% endblock %}
+    </div>
+
+
+
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <script>
+
+        $(document).ready(function () {
+            var allstatus = ['Aberto','Em Andamento', 'Cancelado', 'Fechado'];
+            $("td.status").on("dblclick",function(){
+                conteudoOriginal = $(this).text();
+                var htmlIn = "<select>";
+                for(var i=0; i<allstatus.length; i++){
+                    if(allstatus[i] == conteudoOriginal){
+                      htmlIn = htmlIn + "<option selected>" + allstatus[i] +"</option>";
+                    } else {
+                      htmlIn = htmlIn + "<option>" + allstatus[i] +"</option>";
+                    }
+                }
+                 htmlIn = htmlIn + "</select>";
+                 $(this).html(htmlIn);
+                 $(this).focus();
+
+                 $(this).children().first().on("blur",function () {
+                    novoConteudo = $(this).val();
+                    $(this).parent().text(novoConteudo);
+                  });
+
+             });
+        });
+    </script>
+</body>
+
+</html>
