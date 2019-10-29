@@ -1,12 +1,18 @@
 from django.db import models
 
-
-class Alerta(models.Model):
-    dataHoraRegistro:str = models.DateField()
-    estado:str = models.CharField(max_length=30)
-    numeroOnibus:int = models.IntegerField()
-    latitude:str = models.CharField(max_length=20)
-    longitude:str = models.CharField(max_length=20)
-    suspeitoID:int = models.IntegerField()
-    urlFoto:str = models.CharField(max_length=400)
+class Medicine(models.Model):
+    #idMedicines:str = models.CharField(max_length=255)
+    name:str = models.CharField(max_length=255)
+    amount:int= models.IntegerField()
+    minAmount:int = models.IntegerField()
+    lot:str = models.CharField(max_length=255)
+    validity:str = models.CharField(max_length=30)
+    #validity:str = models.DateField()
+    description:str=models.TextField()
+    
+class Patient(models.Model):
+    idPatient:str = models.CharField(max_length=50)
+    name:str = models.CharField(max_length=30)
+    susCard:str = models.CharField(max_length=30)
+    address:str = models.CharField(max_length=30)
 

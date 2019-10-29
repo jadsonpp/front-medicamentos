@@ -1,4 +1,5 @@
 from django.contrib import admin
-from .models import Alerta
+from .models import Medicine,Patient
 # Register your models here.
-admin.site.register(Alerta)
+admin.site.register(Medicine)
+admin.site.register(Patient)

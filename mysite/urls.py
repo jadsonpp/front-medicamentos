@@ -1,9 +1,14 @@
 from django.contrib import admin
 from django.urls import path
-from .views import home #,estadoAberto,estadoCancelado,estadoFechado,estadoAndamento
+from .views import (
+    home,
+    teste
 
+) #,estadoAberto,estadoCancelado,estadoFechado,estadoAndamento
+ 
 urlpatterns = [
     path('', home),
+    path('teste',teste, name="teste")
 ]
 
 '''
