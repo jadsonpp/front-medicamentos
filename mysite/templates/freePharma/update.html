@@ -10,7 +10,7 @@
     <body>
         
         <div class="card-body">
-            <form action="new"method="POST">
+            <form method="POST">
                 {% csrf_token %}
                 {{form.as_p}}
                 <input type="submit" name="medicine">

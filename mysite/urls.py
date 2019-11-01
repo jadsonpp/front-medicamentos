@@ -2,13 +2,16 @@ from django.contrib import admin
 from django.urls import path
 from .views import (
     home,
-    teste
+    new_medicine,
+    medicine_update,
+    medicine_delete
+)
 
-) #,estadoAberto,estadoCancelado,estadoFechado,estadoAndamento
- 
 urlpatterns = [
-    path('', home),
-    path('teste',teste, name="teste")
+    path('', home,name='home'),
+    path('medicine/new',new_medicine, name="new_medicine"),
+    path('medicine/edit/<str:id>/',medicine_update,name="medicine_update"),
+    path('medicine/delete/<str:id>/',medicine_delete,name="medicine_delete")
 ]
 
 '''

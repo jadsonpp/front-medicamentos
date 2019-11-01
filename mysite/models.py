@@ -1,7 +1,7 @@
 from django.db import models
+from django.urls import reverse
 
 class Medicine(models.Model):
-    #idMedicines:str = models.CharField(max_length=255)
     name:str = models.CharField(max_length=255)
     amount:int= models.IntegerField()
     minAmount:int = models.IntegerField()
@@ -9,9 +9,21 @@ class Medicine(models.Model):
     validity:str = models.CharField(max_length=30)
     #validity:str = models.DateField()
     description:str=models.TextField()
+
+    def showMedicine(self):
+        print(self.name)
+        print(self.amount)
+        print(self.minAmount)
+        print(self.lot)
+        print(self.validity)
+        print(self.description)
     
+
+    '''def get_url(self):
+        return reverse('')
+    '''
 class Patient(models.Model):
-    idPatient:str = models.CharField(max_length=50)
+    
     name:str = models.CharField(max_length=30)
     susCard:str = models.CharField(max_length=30)
     address:str = models.CharField(max_length=30)
