@@ -7,8 +7,7 @@ class Medicine(models.Model):
     minAmount:int = models.IntegerField()
     lot:str = models.CharField(max_length=255)
     validity:str = models.CharField(max_length=30)
-    #validity:str = models.DateField()
-    description:str=models.TextField()
+    description:str=models.CharField(max_length=400)
 
     def showMedicine(self):
         print(self.name)

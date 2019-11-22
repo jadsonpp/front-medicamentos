@@ -9,9 +9,18 @@ from .models import(
 
 from .forms import (
     PatientForm,
-    MedicineForm
+    MedicineForm,
+    RegisterForm
 )
 
+def registerUser(response):
+    if response.method =="POST":
+        form = RegisterForm(response.POST)
+        if form.is_valid():
+            form.save()
+    else:
+        form = RegisterForm()
+    return render(response,"Registration/createReg.html",{"form":form})
 
 def home(request):
     url = "https://api-medicamentos.herokuapp.com/api/medicines"
@@ -55,9 +64,9 @@ def new_medicine(request):
             r = requests.post(api,
                     data= json.dumps(medicine),
                     headers = {'content-type':'application/json'})
-            return render (request, 'freePharma/test.html', {'form':form,'medicine':medicine})
-    else:
-        return render (request, 'freePharma/test.html', {'form':form})
+            return redirect ('home')
+    
+    return render (request, 'freePharma/createMedicine.html', {'form':form})
 
 
 #@login_required
@@ -89,10 +98,11 @@ def medicine_update(request,id:str):
             r = requests.put(url,
                     data= json.dumps(medicine),
                     headers = {'content-type':'application/json'})
-            
             return redirect ('home')   
+        #
+    #
     
-    return render (request, 'freePharma/update.html', {'form':form})
+    return render (request, 'freePharma/updateMedicine.html', {'form':form})
 
 def medicine_delete(request,id:str):
     #if(request.method == "delete"):

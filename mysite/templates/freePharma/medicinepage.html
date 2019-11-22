@@ -138,32 +138,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
-    <script>
-
-        $(document).ready(function () {
-            var allstatus = ['Aberto','Em Andamento', 'Cancelado', 'Fechado'];
-            $("td.status").on("dblclick",function(){
-                conteudoOriginal = $(this).text();
-                var htmlIn = "<select>";
-                for(var i=0; i<allstatus.length; i++){
-                    if(allstatus[i] == conteudoOriginal){
-                      htmlIn = htmlIn + "<option selected>" + allstatus[i] +"</option>";
-                    } else {
-                      htmlIn = htmlIn + "<option>" + allstatus[i] +"</option>";
-                    }
-                }
-                 htmlIn = htmlIn + "</select>";
-                 $(this).html(htmlIn);
-                 $(this).focus();
-
-                 $(this).children().first().on("blur",function () {
-                    novoConteudo = $(this).val();
-                    $(this).parent().text(novoConteudo);
-                  });
-
-             });
-        });
-    </script>
+    
 </body>
 
 </html>
