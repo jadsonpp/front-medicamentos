@@ -6,12 +6,14 @@ from .views import (
     medicine_update,
     medicine_delete,
     registerUser,
-    login
+    login,
+    logout
 )
 
 urlpatterns = [
-    path('',login,name = "loginUser"),
-    path('register',registerUser,name="registra"),
+    path('',login, name="loginUser"),
+    path('logout',logout, name="logout"),
+    path('register',registerUser,name="register"),
     path('h', home,name='home'),
     path('medicine/new',new_medicine, name="new_medicine"),
     path('medicine/edit/<str:id>/',medicine_update,name="medicine_update"),

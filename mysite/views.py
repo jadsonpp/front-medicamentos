@@ -1,4 +1,5 @@
 from django.views.generic import TemplateView
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 import requests
 import json
@@ -13,8 +14,11 @@ from .forms import (
     RegisterForm
 )
 
-def login(request):
-	return render(request, "Registration/login.html", {})
+def login(response):
+    return redirect ('/login')
+
+def logout(response):
+    return redirect ('/logout')
 
 def registerUser(response):
     if response.method =="POST":
@@ -24,8 +28,9 @@ def registerUser(response):
             #return redirect()
     else:
         form = RegisterForm()
-    return render(response,"Registration/createReg.html",{"form":form})
+    return render(response,"registration/reg.html",{"form":form})
 
+@login_required
 def home(request):
     url = "https://api-medicamentos.herokuapp.com/api/medicines"
     r = requests.get(url).json()
@@ -40,7 +45,7 @@ def home(request):
     #rDict
     return render(request, 'freePharma/medicinepage.html', {'medicines': r})
 
-
+@login_required
 def new_medicine(request):
     form = MedicineForm(request.POST)
     
@@ -72,8 +77,7 @@ def new_medicine(request):
     
     return render (request, 'freePharma/createMedicine.html', {'form':form})
 
-
-#@login_required
+@login_required
 def medicine_update(request,id:str):
     url = "https://api-medicamentos.herokuapp.com/api/medicines/"+str(id)
     r = requests.get(url).json()
@@ -107,7 +111,7 @@ def medicine_update(request,id:str):
     #
     
     return render (request, 'freePharma/updateMedicine.html', {'form':form})
-
+@login_required
 def medicine_delete(request,id:str):
     #if(request.method == "delete"):
 
