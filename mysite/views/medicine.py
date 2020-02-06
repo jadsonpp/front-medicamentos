@@ -4,51 +4,34 @@ from django.shortcuts import render
 import requests
 import json
 from django.shortcuts import get_object_or_404,redirect
-from .models import(
+from ..models import(
     Medicine
 )
 
-from .forms import (
-    PatientForm,
-    MedicineForm,
-    RegisterForm
+from ..forms import (
+    MedicineForm
 )
 
-def login(response):
-    return redirect ('/login')
-
-def logout(response):
-    return redirect ('/logout')
-
-def registerUser(response):
-    if response.method =="POST":
-        form = RegisterForm(response.POST)
-        if form.is_valid():
-            form.save()
-            #return redirect()
-    else:
-        form = RegisterForm()
-    return render(response,"registration/reg.html",{"form":form})
 
 @login_required
+# List of medicines
 def home(request):
+    #Take the information on api and transform on json
     url = "https://api-medicamentos.herokuapp.com/api/medicines"
     r = requests.get(url).json()
+    #Adjust the time (remove unnecessary part of time)
     for i in range(len(r)):
         dataHora = r[i]['validity'].split("T")
         data = dataHora[0]
         r[i]['validade'] = data
         r[i]['id_medicamento'] = r[i]['_id']
-    #rename _id 
-    
-    #rDict = json.loads(r)
-    #rDict
+    #render the new information into medicine page.
     return render(request, 'freePharma/medicinepage.html', {'medicines': r})
-
+    
+#Adding a new Medicine into a database.
 @login_required
 def new_medicine(request):
     form = MedicineForm(request.POST)
-    
     #getting data from a form
     if form.is_valid():
         name = form.cleaned_data["name"]
@@ -57,7 +40,7 @@ def new_medicine(request):
         minAmount = form.cleaned_data["minAmount"]
         lot = form.cleaned_data["lot"]
         validity = form.cleaned_data["validity"]
-        #Coleta os dados do formulário
+        #parse formulare data into medicine
         medicine = {
             'name':name,
             'amount':amount,
@@ -66,24 +49,26 @@ def new_medicine(request):
             'lot':lot,
             'validity':validity
         }
-        #sending
+        #sending datas to database.
         if(request.method=="POST"):
-            #rota de post
             api:str = 'https://api-medicamentos.herokuapp.com/api/medicines'
             r = requests.post(api,
                     data= json.dumps(medicine),
                     headers = {'content-type':'application/json'})
             return redirect ('home')
-    
+    #
     return render (request, 'freePharma/createMedicine.html', {'form':form})
 
+#Update some information from a medicie.
 @login_required
 def medicine_update(request,id:str):
+    #Get Medicine informations and converte to a medicine class.
     url = "https://api-medicamentos.herokuapp.com/api/medicines/"+str(id)
     r = requests.get(url).json()
     medicine = Medicine(id,r['name'],r['amount'],r['minAmount'],r['lot'],r['validity'],r['description'])
-    #medicine.showMedicine()
+    #show this information in a form
     form = MedicineForm(instance=medicine)
+    #Get the new update information.
     if(request.method == 'POST'):
         form = MedicineForm(request.POST,instance=medicine)
         if(form.is_valid()):
@@ -94,7 +79,7 @@ def medicine_update(request,id:str):
             medicine.minAmount = form.cleaned_data["minAmount"]
             medicine.lot = form.cleaned_data["lot"]
             medicine.validity = form.cleaned_data["validity"]
-
+            #Converte this information into a medicine class
             medicine = {
                 'name':medicine.name,
                 'amount':medicine.amount,
@@ -103,6 +88,7 @@ def medicine_update(request,id:str):
                 'lot':medicine.lot,
                 'validity':medicine.validity
             }
+            #sending this new information to a update route.
             r = requests.put(url,
                     data= json.dumps(medicine),
                     headers = {'content-type':'application/json'})
@@ -111,10 +97,10 @@ def medicine_update(request,id:str):
     #
     
     return render (request, 'freePharma/updateMedicine.html', {'form':form})
+
+#Delete the medicine.
 @login_required
 def medicine_delete(request,id:str):
-    #if(request.method == "delete"):
-
     api:str = 'https://api-medicamentos.herokuapp.com/api/medicines/'+id
     r = requests.delete(api,
                         headers = {'content-type':'application/json'})
